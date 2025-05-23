@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  background-color: #222;
+}
+
+#screen-container {
+}
+
+#screen {
+  display: block;
+  margin-inline: auto;
+  border: 1px solid #f00;
+}
