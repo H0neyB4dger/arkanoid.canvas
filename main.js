@@ -67,7 +67,7 @@ class Ball {
         const beta = Math.PI - alpha;
         const gamma = Math.PI / 2;
         const k = -(this.position.x - obj.position.x) / (obj.size.x / 2 + this.radius);
-        const boundary = Math.PI / 10;
+        const boundary = Math.PI / 8;
         const newBeta = Math.min(
           Math.max(beta + k * gamma, Math.PI / 4 + boundary),
           3 * 2 * Math.PI / 4 - boundary
@@ -122,6 +122,7 @@ class Block {
   draw() {
     this.ctx.beginPath();
     this.ctx.fillStyle = this.color;
+    this.ctx.strokeStyle = "#000";
     this.ctx.rect(
       this.position.x - this.size.x / 2,
       this.position.y - this.size.y / 2,
@@ -129,6 +130,7 @@ class Block {
       this.size.y
     );
     this.ctx.fill();
+    this.ctx.stroke();
     this.ctx.closePath();
   }
 }
@@ -250,7 +252,7 @@ function init(objects) {
     objects,
     crtPoint(0, constProps.block.size.y * 4),
     constProps.canvas.width / constProps.block.size.x,
-    5
+    1
   );
   requestAnimationFrame(animate);
 }
@@ -329,11 +331,14 @@ function unsetPlatformKeys(event) {
 
 const sizeCoefficient = 1;
 const color = {
+  blue: "#0065d2",
   darkGrey: "#222",
   grey: "#888",
   yellow: "#ff0",
+  orange: "#f55500",
+  purple: "#af46bc",
   red: "#f44",
-  green: "#4f4",
+  green: "#00a92e",
 }
 const constProps = {
   canvas: {
@@ -348,23 +353,23 @@ const constProps = {
   },
   ball: {
     radius: 10 * sizeCoefficient,
-    speed: 6 * sizeCoefficient,
-    color: color.yellow,
+    speed: 7 * sizeCoefficient,
+    color: color.orange,
   },
   block: {
     size: {
-      x: 20 * sizeCoefficient,
+      x: 40 * sizeCoefficient,
       y: 20 * sizeCoefficient,
     },
-    color: color.grey,
+    color: color.green,
   },
   platform: {
     size: {
       x: 100 * sizeCoefficient,
       y: 20 * sizeCoefficient,
     },
-    speed: 8 * sizeCoefficient,
-    color: color.grey,
+    speed: 9 * sizeCoefficient,
+    color: color.blue,
   },
   framePeriodMs: 16,
 };

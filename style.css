@@ -4,10 +4,11 @@ body {
 }
 
 #screen-container {
+  padding-top: 1px;
 }
 
 #screen {
   display: block;
   margin-inline: auto;
-  border: 1px solid #f00;
+  box-shadow: 0 0 15px #00a92e;
 }
