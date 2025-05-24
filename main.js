@@ -61,13 +61,19 @@ class Ball {
         closestIndex = i;
         minDist = dist;
       }
-      if (obj.constructor.name === "Platform" && this.isCollide(obj)) {
-        const sign = this.speed.x < 0 ? -1 : 1;
+      if (obj.constructor.name === "Platform" && this.isCollide(obj) && this.speed.y > 0) {
         const totalSpeed = Math.sqrt(this.speed.x ** 2 + this.speed.y ** 2);
         const alpha = Math.atan(this.speed.x / this.speed.y);
         const beta = Math.PI - alpha;
-        this.speed.x = Math.sin(beta) * totalSpeed;
-        this.speed.y = Math.cos(beta) * totalSpeed;
+        const gamma = Math.PI / 2;
+        const k = -(this.position.x - obj.position.x) / (obj.size.x / 2 + this.radius);
+        const boundary = Math.PI / 10;
+        const newBeta = Math.min(
+          Math.max(beta + k * gamma, Math.PI / 4 + boundary),
+          3 * 2 * Math.PI / 4 - boundary
+        );
+        this.speed.x = Math.sin(newBeta) * totalSpeed;
+        this.speed.y = Math.cos(newBeta) * totalSpeed;
       }
     }
     if (closestBlock !== null) {
