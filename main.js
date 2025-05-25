@@ -69,9 +69,10 @@ class Ball {
         const k = -(this.position.x - obj.position.x) / (obj.size.x / 2 + this.radius);
         const boundary = Math.PI / 8;
         const newBeta = Math.min(
-          Math.max(beta + k * gamma, Math.PI / 4 + boundary),
+          Math.max(beta + k * gamma, Math.PI / 2 + boundary),
           3 * 2 * Math.PI / 4 - boundary
         );
+        console.log(alpha, newBeta);
         this.speed.x = Math.sin(newBeta) * totalSpeed;
         this.speed.y = Math.cos(newBeta) * totalSpeed;
       }
@@ -168,6 +169,14 @@ class Platform {
   }
 }
 
+
+function radToDeg(rad) {
+  return rad * 180 / Math.PI;
+}
+
+function degToRad(deg) {
+  return deg * Math.PI / 180;
+}
 
 function crtPoint(x, y) {
   return new Point(x, y);
