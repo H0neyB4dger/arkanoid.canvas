@@ -17,10 +17,14 @@ class Ball {
     this.speed = speed;
     this.color = color;
   }
-  bonk(xMin, yMin, xMax, yMax) {
-    let x = this.position.x;
-    let y = this.position.y;
-    let r = this.radius;
+  bonkWithWall() {
+    const xMin = 0;
+    const yMin = 0;
+    const xMax = this.canvas.width;
+    const yMax = Infinity;
+    const x = this.position.x;
+    const y = this.position.y;
+    const r = this.radius;
     if (x + r + this.speed.x > xMax && x - r + this.speed.x < xMax)
       this.speed.x = -Math.abs(this.speed.x);
     else if (x - r + this.speed.x < xMin && x + r + this.speed.x > xMin)
@@ -29,12 +33,6 @@ class Ball {
       this.speed.y = -Math.abs(this.speed.y);
     else if (y - r + this.speed.y < yMin && y + r + this.speed.y > yMin)
       this.speed.y = Math.abs(this.speed.y);
-  }
-  bonkOutside(xMin, yMin, xMax, yMax) {
-    this.bonk(xMax, yMax, xMin, yMin);
-  }
-  bonkWithWall() {
-    this.bonk(0, 0, this.canvas.width, Infinity);
   }
   isCollide(block) {
     const isIntersecting =
@@ -72,18 +70,33 @@ class Ball {
           Math.max(beta + k * gamma, Math.PI / 2 + boundary),
           3 * 2 * Math.PI / 4 - boundary
         );
-        console.log(alpha, newBeta);
         this.speed.x = Math.sin(newBeta) * totalSpeed;
         this.speed.y = Math.cos(newBeta) * totalSpeed;
       }
     }
     if (closestBlock !== null) {
-      this.bonkOutside(
-        closestBlock.position.x - closestBlock.size.x / 2,
-        closestBlock.position.y - closestBlock.size.y / 2,
-        closestBlock.position.x + closestBlock.size.x / 2,
-        closestBlock.position.y + closestBlock.size.y / 2
-      );
+      const b = closestBlock;
+      const x = this.position.x - b.position.x;
+      const y = this.position.y - b.position.y;
+      const alpha = Math.atan2(y, x);
+      const br = Math.atan2(b.size.y / 2, b.size.x / 2);
+      const bl = Math.atan2(b.size.y / 2, -b.size.x / 2);
+      const tl = Math.atan2(-b.size.y / 2, -b.size.x / 2);
+      const tr = Math.atan2(-b.size.y / 2, b.size.x / 2);
+      //console.log(radToDeg(br), radToDeg(bl), radToDeg(tl), radToDeg(tr), radToDeg(alpha));
+      if (alpha >= br && alpha <= bl) {
+        this.speed.y = Math.abs(this.speed.y);
+      }
+      else if ((alpha > bl && alpha <= Math.PI * 2) || (alpha >= -Math.PI * 2 && alpha < tl)) {
+        this.speed.x = -Math.abs(this.speed.x);
+
+      }
+      else if (alpha >= tl && alpha <= tr) {
+        this.speed.y = -Math.abs(this.speed.y);
+      }
+      else {
+        this.speed.x = Math.abs(this.speed.x);
+      }
       this.arr.splice(closestIndex, 1);
     }
   }
